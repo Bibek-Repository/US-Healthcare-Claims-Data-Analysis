@@ -1,0 +1,8 @@
+Python, 
+Pandas, 
+Jupyter / vs Code,
+numpy,
+scipy,
+matplotlib,
+seaborn 
+
