@@ -80,3 +80,32 @@ The following tools are required to set up the environment:
   - Missing values
   - Duplicates
   - Any preliminary observations
+
+## Strategy Decision Framework
+
+            Situation:	               What to Do
+            <5% missing:	            Drop rows
+            Important numeric column:	Fill with median
+            Categorical column:	      Fill with mode
+            Many missing:	            Investigate before dropping
+
+The dataframe under inspection has no duplicates.
+
+Missing Value Treatment
+
+Filled ClaimAmount with median
+Filled PatientGender with mode
+
+Duplicates Removed
+
+X rows removed
+
+Standardization
+
+Gender standardized to M/F
+Dates converted to datetime
+
+Feature Engineering
+
+Created YearMonth
+Created Member-Month metrics
