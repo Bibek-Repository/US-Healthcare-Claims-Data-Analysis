@@ -4,5 +4,8 @@ Jupyter / vs Code,
 numpy,
 scipy,
 matplotlib,
-seaborn 
+seaborn, 
+psycopg2-binary,
+sqlalchemy
+
 
