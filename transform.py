@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 df = pd.read_csv("./Datasets/cleaned_healthcare_claims.csv")
 df.head()
 
@@ -11,8 +12,9 @@ members = df[[
     "PatientGender",
     "PatientIncome",
     "PatientMaritalStatus",
-    "PatientEmploymentStatus"
-]].drop_duplicates()
+    "PatientEmploymentStatus",
+]]
+members = members.drop_duplicates()
 
 members = members.rename(columns={
     "PatientID": "MemberID",
@@ -20,7 +22,7 @@ members = members.rename(columns={
     "PatientGender": "Gender",
     "PatientIncome": "Income",
     "PatientMaritalStatus": "MaritalStatus",
-    "PatientEmploymentStatus": "EmploymentStatus"
+    "PatientEmploymentStatus": "EmploymentStatus",
 })
 
 # Providers Table
@@ -28,12 +30,13 @@ members = members.rename(columns={
 providers = df[[
     "ProviderID",
     "ProviderSpecialty",
-    "ProviderLocation"
-]].drop_duplicates()
+    "ProviderLocation",
+]]
+providers = providers.drop_duplicates()
 
 providers = providers.rename(columns={
     "ProviderSpecialty": "Specialty",
-    "ProviderLocation": "Location"
+    "ProviderLocation": "Location",
 })
 
 # Claims Table
@@ -47,12 +50,12 @@ claims = df[[
     "DiagnosisCode",
     "ClaimStatus",
     "ClaimType",
-    "ClaimSubmissionMethod"
+    "ClaimSubmissionMethod",
 ]].copy()
 
 claims = claims.rename(columns={
     "PatientID": "MemberID",
-    "ClaimSubmissionMethod": "SubmissionMethod"
+    "ClaimSubmissionMethod": "SubmissionMethod",
 })
 
 # Date Conversion
@@ -63,7 +66,7 @@ claims["ClaimDate"] = pd.to_datetime(claims["ClaimDate"])
 
 services = df[[
     "ClaimID",
-    "ProcedureCode"
+    "ProcedureCode",
 ]].copy()
 
 services["ServiceID"] = range(1, len(services) + 1)

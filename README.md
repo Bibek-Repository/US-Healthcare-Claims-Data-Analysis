@@ -109,3 +109,78 @@ Feature Engineering
 
 Created YearMonth
 Created Member-Month metrics
+
+Members (1) ────< Claims >──── (1) Providers
+                      |
+                      |
+                   Services
+
+services table is created and a new column is added which has its range: range(1, len(services) + 1)
+
+Task Documentation – Day 4: Basic Analytics & SQL Queries
+
+Date: 22-Feb-2026
+Goal: Extract insights from the healthcare claims dataset using SQL and Python; perform basic analytics and fix minor errors.
+
+1. SQL Queries Completed
+
+a) Total claims per member
+
+SELECT 
+    m.member_id,
+    COUNT(c.claimid) AS total_claims
+FROM members m
+LEFT JOIN claims c 
+    ON m.member_id = c.member_id
+GROUP BY m.member_id
+ORDER BY total_claims DESC;
+
+b) Total cost per month
+
+SELECT 
+    DATE_TRUNC('month', c.claimdate) AS claim_month,
+    SUM(c.claimamount) AS total_cost
+FROM claims c
+GROUP BY claim_month
+ORDER BY claim_month;
+
+c) Top 10 services by total cost
+
+SELECT 
+    s.serviceid,
+    s.procedurecode,
+    SUM(c.claimamount) AS total_cost
+FROM services s
+JOIN claims c
+    ON s.claimid = c.claimid
+GROUP BY s.serviceid, s.procedurecode
+ORDER BY total_cost DESC
+LIMIT 10;
+
+Notes on Queries:
+
+LEFT JOIN ensures members with zero claims are included.
+
+SUM() aggregates costs for services and monthly totals.
+
+LIMIT 10 fetches only the top 10 most expensive services.
+
+GROUP BY ensures proper aggregation at member, month, or service level.
+
+2. Error Fixes / Improvements
+
+Fixed incorrect joins that caused NULL or missing entries.
+
+Corrected aggregation to group by both serviceid and procedurecode for accurate top 10 service costs.
+
+Ensured column names match the current table schema (claimid, serviceid, procedurecode, claimamount).
+
+3. Recommendations / Next Steps
+
+Validate SQL results against raw CSV data.
+
+Move queries into analytics.py for reproducible analysis using Pandas.
+
+
+
+
