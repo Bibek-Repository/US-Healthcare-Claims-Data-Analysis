@@ -25,6 +25,8 @@ ORDER BY ClaimAmount DESC;
 
 df_claims_per_member = pd.read_sql(query1, engine)
 print(df_claims_per_member)
+claims_per_member = pd.read_sql(query1, engine)
+claims_per_member.to_csv("./visualizations/claims_per_member.csv", index=False)
 
 
 # Total cost per month
@@ -39,6 +41,8 @@ ORDER BY month;
 
 df_monthly_cost = pd.read_sql(query2, engine)
 print(df_monthly_cost)
+cost_per_month = pd.read_sql(query2, engine)
+cost_per_month.to_csv("./visualizations/cost_per_month.csv", index=False)
 
 # top ten services
 
@@ -57,3 +61,5 @@ LIMIT 10;
 
 df_top_ten_services = pd.read_sql(query3, engine)
 print(df_top_ten_services)
+top_ten_service = pd.read_sql(query3, engine)
+top_ten_service.to_csv("./visualizations/top_ten_service.csv", index=False)
