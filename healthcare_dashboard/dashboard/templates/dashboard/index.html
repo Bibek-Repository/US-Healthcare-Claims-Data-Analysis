@@ -32,22 +32,41 @@
 <h2>Cost by Gender</h2>
 <canvas id="genderChart"></canvas>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-var genderData = {{ cost_by_gender|safe }};
+    // Parse Django context JSON safely
+    var genderData = JSON.parse('{{ cost_by_gender|escapejs }}');
 
-var labels = genderData.map(item => item.Gender);
-var costs = genderData.map(item => item.total_cost);
+    // Map CSV columns to chart labels and values
+    var labels = genderData.map(item => item.gender);        // ['F', 'M']
+    var costs = genderData.map(item => item.total_cost);     // [103095214.02, 99980042.58]
 
-new Chart(document.getElementById('genderChart'), {
-    type: 'bar',
-    data: {
-        labels: labels,
-        datasets: [{
-            label: 'Cost by Gender',
-            data: costs
-        }]
-    }
-});
+    // Create bar chart
+    new Chart(document.getElementById('genderChart'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Total Cost by Gender',
+                data: costs,
+                backgroundColor: ['rgba(255, 99, 132, 0.6)', 'rgba(54, 162, 235, 0.6)']
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        // Format large numbers nicely
+                        callback: function(value) {
+                            return '$' + value.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
 </script>
 
 </body>

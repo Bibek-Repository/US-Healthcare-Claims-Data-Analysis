@@ -16,12 +16,14 @@ def index(request):
 
     context = {
         "total_claims": len(claims_per_member),
-        "total_cost": cost_per_month["monthly_cost"].sum(),
+        "total_cost": cost_per_month["total_monthly_cost"].sum(),
         "top_patient": highest_spending.iloc[0].to_dict(),
         "top_services": top_services.to_dict(orient='records'),
         "cost_by_gender": cost_by_gender.to_dict(orient='records'),
         "cost_by_age": cost_by_age.to_dict(orient='records'),
-        "monthly_trend": cost_per_month.to_dict(orient='records'),
+        "monthly_cost": cost_per_month.to_dict(orient='records'),
     }
 
     return render(request, "dashboard/index.html", context)
+
+
