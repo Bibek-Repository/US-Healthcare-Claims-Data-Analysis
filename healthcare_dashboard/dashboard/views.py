@@ -1,6 +1,7 @@
 from django.conf import settings
 import pandas as pd
 from django.shortcuts import render
+import json
 
 def index(request):
 
@@ -19,9 +20,10 @@ def index(request):
         "total_cost": cost_per_month["total_monthly_cost"].sum(),
         "top_patient": highest_spending.iloc[0].to_dict(),
         "top_services": top_services.to_dict(orient='records'),
-        "cost_by_gender": cost_by_gender.to_dict(orient='records'),
-        "cost_by_age": cost_by_age.to_dict(orient='records'),
-        "monthly_cost": cost_per_month.to_dict(orient='records'),
+        # Serialize to JSON strings for proper template rendering
+        "cost_by_gender": json.dumps(cost_by_gender.to_dict(orient='records')),
+        "cost_by_age": json.dumps(cost_by_age.to_dict(orient='records')),
+        "monthly_cost": json.dumps(cost_per_month.to_dict(orient='records')),
     }
 
     return render(request, "dashboard/index.html", context)
