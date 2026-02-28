@@ -1,7 +1,11 @@
 from django.conf import settings
 import pandas as pd
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.views.decorators.http import require_http_methods
 import json
+from .models import Claim
+import uuid
 
 def index(request):
 
@@ -27,5 +31,47 @@ def index(request):
     }
 
     return render(request, "dashboard/index.html", context)
+
+
+@require_http_methods(["POST"])
+def add_claim(request):
+    """Handle new claim form submission"""
+    try:
+        # Get form data
+        member_id = request.POST.get('memberID', '').strip()
+        claim_amount = request.POST.get('claimAmount', '')
+        claim_date = request.POST.get('claimDate', '')
+        service_id = request.POST.get('serviceID', '').strip()
+        procedure_code = request.POST.get('procedureCode', '').strip()
+        description = request.POST.get('description', '').strip()
+        
+        # Validation
+        if not member_id or not claim_amount or not claim_date:
+            messages.error(request, "Member ID, Claim Amount, and Claim Date are required fields.")
+            return redirect('index')
+        
+        # Generate unique Claim ID
+        claim_id = f"CLM-{uuid.uuid4().hex[:12].upper()}"
+        
+        # Create and save claim
+        claim = Claim.objects.create(
+            MemberID=member_id,
+            ClaimID=claim_id,
+            ClaimAmount=float(claim_amount),
+            ClaimDate=claim_date,
+            ServiceID=service_id if service_id else None,
+            ProcedureCode=procedure_code if procedure_code else None,
+            Description=description if description else None
+        )
+        
+        messages.success(request, f"Claim {claim_id} has been successfully added!")
+        return redirect('index')
+        
+    except ValueError as e:
+        messages.error(request, f"Invalid input: {str(e)}")
+        return redirect('index')
+    except Exception as e:
+        messages.error(request, f"An error occurred: {str(e)}")
+        return redirect('index')
 
 
